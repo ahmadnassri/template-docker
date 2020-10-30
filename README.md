@@ -29,11 +29,11 @@ a template for Docker projects
 [semantic-url]: https://github.com/ahmadnassri/template-docker/actions?query=workflow%3Arelease
 [semantic-img]: https://badgen.net/badge/📦/semantically%20released/blue
 
-[size-url]: https://hub.docker.com/r/ahmadnassri/docker-template
-[size-img]: https://badgen.net/docker/size/ahmadnassri/docker-template
+[size-url]: https://hub.docker.com/r/ahmadnassri/template
+[size-img]: https://badgen.net/docker/size/ahmadnassri/template
 
-[docker-url]: https://hub.docker.com/r/ahmadnassri/docker-template
+[docker-url]: https://hub.docker.com/r/ahmadnassri/template
 [docker-img]: https://badgen.net/badge/icon/docker%20hub?icon=docker&label
 
-[github-url]: https://github.com/users/ahmadnassri/packages/container/package/docker-template
+[github-url]: https://github.com/users/ahmadnassri/packages/container/package/template
 [github-img]: https://badgen.net/badge/icon/github%20registry?icon=github&label
