@@ -1,6 +1,7 @@
 additional:
   # temporarily include repos manually # https://github.com/github/docs/issues/3630
   - "docker-*"
+  - "!docker-machine-hosting-cost"
 
 files:
   - "!src/.gitignore"
