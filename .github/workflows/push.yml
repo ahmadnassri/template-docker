@@ -1,3 +1,7 @@
+# ----------------------------------------------------------- #
+# Note: this file is automatically managed in template-docker #
+# ----------------------------------------------------------- #
+
 on: push
 
 name: push
@@ -124,8 +128,9 @@ jobs:
       - commit-lint
       - super-linter
 
-    # only runs on main branch
-    if: ${{ github.ref == 'refs/heads/master' }}
+    # only runs on main branch and only for the template
+    if: github.ref == 'refs/heads/master' &&
+        fromJSON(needs.metadata.outputs.repository).is_template
 
     runs-on: ubuntu-latest
 
