@@ -1,11 +1,47 @@
-name: release
+on: push
 
-on:
-  push:
-    branches: master
+name: push
 
 jobs:
+  commit-lint:
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ahmadnassri/action-commit-lint@v1
+        with:
+          config: .github/linters/.commit-lint.yml
+
+  super-linter:
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: github/super-linter@v4.8.1
+        env:
+          LOG_LEVEL: ERROR
+          VALIDATE_ALL_CODEBASE: false
+          FILTER_REGEX_EXCLUDE: '/github/workspace/README.md|test/fixtures/*'
+          GITHUB_TOKEN: ${{ github.token }}
+
   release:
+    timeout-minutes: 5
+
+    needs:
+      - commit-lint
+      - super-linter
+
+    # only runs on main branch
+    if: ${{ github.ref == 'refs/heads/master' }}
+
     runs-on: ubuntu-latest
 
     outputs:
@@ -21,12 +57,15 @@ jobs:
         with:
           config: ${{ github.workspace }}/.semantic.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish:
-    needs: release
+    timeout-minutes: 10
 
-    if: needs.release.outputs.published == 'true'
+    needs:
+      - release
+
+    if: ${{ needs.release.outputs.published == 'true' }}
 
     runs-on: ubuntu-latest
 
@@ -55,7 +94,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
 
       - id: hub
-        run: echo "::set-output name=name::$(basename ${GITHUB_REPOSITORY/docker-//})"
+        run: echo "::set-output name=name::$(basename "${GITHUB_REPOSITORY/docker-//}")"
 
       # publish
       - uses: docker/build-push-action@v2
@@ -76,3 +115,25 @@ jobs:
             org.opencontainers.image.version=${{ needs.release.outputs.release-version }}
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.revision=${{ github.sha }}
+
+  template-sync:
+    timeout-minutes: 20
+
+    needs:
+      - release
+      - commit-lint
+      - super-linter
+
+    # only runs on main branch
+    if: ${{ github.ref == 'refs/heads/master' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: ahmadnassri/action-workflow-queue@v1.1
+
+      - uses: actions/checkout@v2
+
+      - uses: ahmadnassri/action-template-repository-sync@v1.6.0
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
