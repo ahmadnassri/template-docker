@@ -21,7 +21,7 @@ a template for Docker projects
 [release-img]: https://badgen.net/github/release/ahmadnassri/template-docker
 
 [size-url]: https://hub.docker.com/r/ahmadnassri/template-docker
-[size-img]: https://badgen.net/docker/size/ahmadnassri/template-docker
+[size-img]: https://badgen.net/docker/size/ahmadnassri/template-docker?label=image%20size
 
 [docker-url]: https://hub.docker.com/r/ahmadnassri/template-docker
 [docker-img]: https://badgen.net/badge/icon/docker%20hub?icon=docker&label
