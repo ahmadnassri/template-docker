@@ -9,3 +9,4 @@ files:
   - "!README.md"
   - "!docs/README.md"
   - "!**/template-sync.yml"
+  - "!**/publish-matrix.json"
