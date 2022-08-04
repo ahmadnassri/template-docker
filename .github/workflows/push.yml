@@ -146,7 +146,7 @@ jobs:
         if: ${{ matrix.registry == 'docker.io' }}
         run: |
           JWT=$(curl -s -d "username=${{ github.repository_owner }}&password=${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/users/login/ | jq -r .token)
-          http --quiet PATCH https://hub.docker.com/v2/repositories/${{ github.repository_owner }}/$IMAGE "Authorization: JWT ${JWT}" "description=${{ github.event.repository.description }}" full_description=@README.md
+          http --quiet PATCH "https://hub.docker.com/v2/repositories/${{ github.repository_owner }}/$IMAGE" "Authorization: JWT ${JWT}" "description=${{ github.event.repository.description }}" full_description=@README.md
 
 
   template-sync:
