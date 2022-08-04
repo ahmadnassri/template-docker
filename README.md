@@ -4,7 +4,6 @@ a template for Docker projects
 
 [![license][license-img]][license-url]
 [![release][release-img]][release-url]
-
 [![size][size-img]][size-url]
 [![docker][docker-img]][docker-url]
 [![github][github-img]][github-url]
