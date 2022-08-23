@@ -3,10 +3,11 @@ additional:
   - "docker-*"
 
 files:
-  - "!src/.gitignore"
-  - "!Dockerfile"
-  - "!colophon.yml"
-  - "!README.md"
-  - "!docs/README.md"
-  - "!**/template-sync.yml"
+  - "!.env"
   - "!**/publish-matrix.json"
+  - "!**/template-sync.yml"
+  - "!colophon.yml"
+  - "!Dockerfile"
+  - "!docs/README.md"
+  - "!README.md"
+  - "!src/.gitignore"
