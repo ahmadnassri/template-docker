@@ -4,10 +4,6 @@
 # Note: this file is automatically managed in template-docker #
 # ----------------------------------------------------------- #
 
-# SHELL := /bin/bash
-
-LINT_PATH	:= ${PWD}/${LINT_PATH}
-
 # Docker
 
 pull: ## pull latest containers
