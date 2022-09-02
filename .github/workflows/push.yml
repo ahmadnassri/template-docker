@@ -167,7 +167,6 @@ jobs:
 
     needs:
       - metadata
-      - release
       - commit-lint
       - mega-linter
 
