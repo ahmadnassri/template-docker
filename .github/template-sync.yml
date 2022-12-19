@@ -11,3 +11,5 @@ files:
   - "!docs/README.md"
   - "!README.md"
   - "!src/.gitignore"
+  - "!.github/dependabot.yml"
+  - .github/dependabot-template.yml: .github/dependabot.yml
