@@ -27,6 +27,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3.4.0
+        # kics-scan ignore-line
         if: ${{ env.HAS_DOCKER_TOKEN == 'true' }}
 
       - id: image
