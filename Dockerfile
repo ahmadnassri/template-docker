@@ -1,2 +1,3 @@
 FROM scratch
 COPY src/* /
+HEALTHCHECK NONE
