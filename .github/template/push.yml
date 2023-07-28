@@ -79,8 +79,6 @@ jobs:
       - metadata
       - publish-strategy
 
-    timeout-minutes: 10
-
     if: ${{ needs.release.outputs.published == 'true' }}
 
     name: ${{ format('publish to {0}', matrix.registry) || 'publish-step' }}
@@ -93,6 +91,7 @@ jobs:
       name: ${{ needs.image.outputs.name }}
       version: ${{ needs.release.outputs.version }}
       alias: ${{ needs.release.outputs.version-major }}
-      password: ${{ secrets[format('{0}_TOKEN', matrix.id)] }}
       platforms: ${{ matrix.platforms }}
       registry: ${{ matrix.registry }}
+    secrets:
+      password: ${{ secrets[format('{0}_TOKEN', matrix.id)] }}
