@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      image-name: ${{ steps.image.outputs.name }}
+      name: ${{ steps.image.outputs.name }}
 
     steps:
       - id: image
@@ -89,8 +89,8 @@ jobs:
     uses: ahmadnassri/actions/.github/workflows/docker-build-push.yml@master
     with:
       name: ${{ needs.image.outputs.name }}
-      version: ${{ needs.release.outputs.version }}
-      alias: ${{ needs.release.outputs.version-major }}
+      version: ${{ needs.release.outputs.release-version }}
+      alias: ${{ needs.release.outputs.release-version-major }}
       platforms: ${{ matrix.platforms }}
       registry: ${{ matrix.registry }}
     secrets:
