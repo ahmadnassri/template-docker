@@ -1,1 +1,1 @@
-exclude_path = [".github/workflows"]
+exclude_path = [".github"]
