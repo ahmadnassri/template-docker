@@ -1,0 +1,98 @@
+# --------------------------------------------- #
+# Note: this file originates in template-docker #
+# --------------------------------------------- #
+
+name: push
+
+on:
+  - push
+  - workflow_dispatch
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+
+permissions: read-all
+
+jobs:
+  metadata:
+    uses: ahmadnassri/actions/.github/workflows/metadata.yml@master
+
+  image:
+    runs-on: ubuntu-latest
+
+    outputs:
+      image-name: ${{ steps.image.outputs.name }}
+
+    steps:
+      - id: image
+        run: echo "name=$(basename "${GITHUB_REPOSITORY/docker-//}")" >> "$GITHUB_OUTPUT"
+
+  lint-commits:
+    uses: ahmadnassri/actions/.github/workflows/lint-commits.yml@master
+
+  lint-content:
+    uses: ahmadnassri/actions/.github/workflows/lint-all.yml@master
+
+    permissions:
+      contents: write
+      statuses: write
+      pull-requests: write
+
+  release:
+    needs:
+      - metadata
+      - lint-commits
+      - lint-content
+
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+
+    uses: ahmadnassri/actions/.github/workflows/semantic-release.yml@master
+    with:
+      repository_default_branch: ${{ needs.metadata.outputs.repository_default_branch }}
+
+  publish-strategy:
+    needs:
+      - metadata
+
+    timeout-minutes: 5
+
+    # only runs on main branch
+    if: ${{ needs.metadata.outputs.repository_default_branch == github.ref_name }}
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.parse.outputs.matrix }}
+
+    steps:
+      - uses: actions/checkout@v3.5.3
+      - id: parse
+        run: echo "matrix=$(jq -c . < .github/publish-matrix.json)" >> "$GITHUB_OUTPUT"
+
+  publish-docker:
+    needs:
+      - image
+      - release
+      - metadata
+      - publish-strategy
+
+    timeout-minutes: 10
+
+    if: ${{ needs.release.outputs.published == 'true' }}
+
+    name: ${{ format('publish to {0}', matrix.registry) || 'publish-step' }}
+
+    strategy:
+      matrix: ${{ fromJSON(needs.publish-strategy.outputs.matrix) }}
+
+    uses: ahmadnassri/actions/.github/workflows/docker-build-push.yml@master
+    with:
+      name: ${{ needs.image.outputs.name }}
+      version: ${{ needs.release.outputs.version }}
+      alias: ${{ needs.release.outputs.version-major }}
+      password: ${{ secrets[format('{0}_TOKEN', matrix.id)] }}
+      platforms: ${{ matrix.platforms }}
+      registry: ${{ matrix.registry }}
