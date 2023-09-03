@@ -4,7 +4,7 @@ additional:
 
 files:
   - "!.env"
-  - "!**/publish-matrix.json"
+  - "!**/matrix-*.json"
   - "!**/template-sync.yml"
   - "!colophon.yml"
   - "!Dockerfile"
